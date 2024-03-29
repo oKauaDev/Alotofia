@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alotofia</title>
+</head>
+
+<body>
+  <div class="loading_modal">
+    <div>
+      <div class="loader"></div>
+      <p data-loadingtext>Carregando ia...</p>
+    </div>
+  </div>
+  <div class="settings_modal">
+    <div class="modal">
+      <h1>Configuração do Alotofia</h1>
+      <p>Configure com oquer a sua IA, crie vários players, importe vários modelos salvos, configure o que quiser.</p>
+      <form data-settings="initialize">
+        <label>
+          Dados de treinamento
+          <input type="number" name="date_brain" value="10000">
+        </label>
+        <label>
+          Players
+          <input type="number" name="players" value="1">
+        </label>
+        <button>Iniciar Alotofia</button>
+      </form>
+    </div>
+  </div>
+  <div id="app">
+    <div>
+      <h1 class="title">Alotofia</h1>
+      <p class="description">Um simples projeto para aprimorar o meu treinamento em inteligência artificial, a ideia é
+        criar vários players que sejam realmente uma IA treinadas usando o TensorFlow, a ideia é que elas consigam se
+        treinar e aprender sozinhas.</p>
+      <canvas width="20" height="20" class="canvas"></canvas>
+    </div>
+  </div>
+  <div class="ranking">
+    <ul data-score></ul>
+  </div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>
