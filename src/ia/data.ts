@@ -40,6 +40,7 @@ export function generateTrainModel() {
       const move = generateMove(xIA, yIA, xFRUT, yFRUT);
       moves.push(move);
     }
+
     return moves;
   }
 

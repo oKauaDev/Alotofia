@@ -203,6 +203,17 @@ body {
   transition: all 0.5s;
 }
 
+.blockplayer {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+.playerview {
+  display: flex;
+  gap: 8px;
+}
+
 .modal button:hover {
   background: #51b1f6;
 }

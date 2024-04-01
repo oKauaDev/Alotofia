@@ -42,7 +42,10 @@ export default class Game {
 
   public registerPlayer(player: Player) {
     this.players.push(player);
-    this.playersData = { ...this.playersData, [player.getID()]: { points: 0 } };
+    this.playersData = {
+      ...this.playersData,
+      [player.getID()]: { points: 0, color: player.getColor() },
+    };
     this.renderizeScore();
   }
 
@@ -63,7 +66,12 @@ export default class Game {
   }
 
   public generateFruits() {
-    const fruits = this.players.length;
+    let fruits = this.players.length - this.fruits.length;
+
+    if (fruits <= 0) {
+      fruits = this.players.length;
+    }
+
     for (let i = 0; i < fruits; i++) {
       this.spawnFruit();
     }
@@ -74,6 +82,7 @@ export default class Game {
     const arrayPoints = Object.keys(this.playersData).map((key) => {
       return {
         name: key,
+        color: this.playersData[key].color,
         points: this.playersData[key].points,
       };
     });
@@ -81,7 +90,7 @@ export default class Game {
     pointsSort.forEach((player) => {
       this.score.innerHTML += `
       <li>
-        <span class="player">Player ${player.name}:</span>
+        <span class="playerview"><span class="blockplayer" style="background-color: ${player.color}"></span>:</span>
         <span class="jt">
           <span class="points">${player.points}</span>
           <img src="./download.svg" class="p_settings" id="${player.name}" data-actionplayer${player.name}="download" />
@@ -127,9 +136,11 @@ export default class Game {
         this.fruits.splice(index, 1);
         this.generateFruits();
         this.renderizeScore();
-        this.players.forEach((player) => {
-          player.setFruitIndex(this.getFruit());
-        });
+
+        const colisionPlayer = this.getPlayerByID(playerCol.getID());
+        if (colisionPlayer) {
+          colisionPlayer.setFruitIndex(this.getFruit());
+        }
       }
     });
   }
