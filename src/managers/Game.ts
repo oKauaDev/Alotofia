@@ -80,10 +80,13 @@ export default class Game {
   public renderizeScore() {
     this.score.innerHTML = "";
     const arrayPoints = Object.keys(this.playersData).map((key) => {
+      const player = this.getPlayerByID(Number(key));
+
       return {
         name: key,
         color: this.playersData[key].color,
         points: this.playersData[key].points,
+        train: player?.getTrainPoints() || 0,
       };
     });
     const pointsSort = arrayPoints.sort((a, b) => b.points - a.points);
@@ -93,6 +96,7 @@ export default class Game {
         <span class="playerview"><span class="blockplayer" style="background-color: ${player.color}"></span>:</span>
         <span class="jt">
           <span class="points">${player.points}</span>
+          <span class="train" style="color: #025b0b;">${player.train}</span>
           <img src="./download.svg" class="p_settings" id="${player.name}" data-actionplayer${player.name}="download" />
           <img src="./delete.svg" class="p_settings" id="${player.name}" data-actionplayer${player.name}="delete" />
         </span>
@@ -127,6 +131,10 @@ export default class Game {
 
   public checkCollisions() {
     this.fruits.forEach((fruit, index) => {
+      this.players.forEach((player) => {
+        player.addNeoron(fruit.getX(), fruit.getY());
+      });
+
       const playerCol = this.players.find((player) => {
         return player.getX() === fruit.getX() && player.getY() === fruit.getY();
       });

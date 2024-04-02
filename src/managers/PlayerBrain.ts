@@ -33,6 +33,8 @@ export default class PlayerBrain {
       })
     );
 
+    this.getPlayer().addTrainPoints(moves.length);
+
     const learningRate = 0.25;
     const optimizer = tf.train.sgd(learningRate);
 
@@ -59,6 +61,26 @@ export default class PlayerBrain {
       .expandDims(1);
 
     await this.model.fit(input, output, { epochs: 1, shuffle: true, validationSplit: 0.1 });
+  }
+
+  public async trainByMove(xIA: number, yIA: number, xFRUT: number, yFRUT: number, move: string) {
+    if (!this.model) {
+      console.error("O modelo ainda não foi treinado!");
+      return;
+    }
+
+    try {
+      let input = tf.tensor3d([[[xIA, yIA, xFRUT, yFRUT]]]);
+      let output = tf
+        .oneHot(tf.tensor1d([move], "int32"), labels.length)
+        .cast("float32")
+        .expandDims(1);
+
+      await this.model.fit(input, output, { epochs: 1, shuffle: true, validationSplit: 0.1 });
+      this.getPlayer().addTrainPoints();
+    } catch (e) {
+      console.error("Erro ao treinar o modelo:", e);
+    }
   }
 
   private async predict(px: number, py: number, nx: number, ny: number) {

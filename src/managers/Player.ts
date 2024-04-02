@@ -7,9 +7,12 @@ export default class Player {
   private id: number;
   private x: number = 0;
   private y: number = 0;
+  private lastX: number = 0;
+  private lastY: number = 0;
   private color: string;
   private brain: PlayerBrain | undefined;
   private fruitIndex: number = 0;
+  private trainPoints: number = 0;
 
   constructor(config: StartPlayerConfigs) {
     this.game = config.game;
@@ -27,12 +30,20 @@ export default class Player {
     return this.id;
   }
 
+  public getTrainPoints() {
+    return this.trainPoints;
+  }
+
   public getFruitIndex() {
     return this.fruitIndex;
   }
 
   public setFruitIndex(fruitIndex: number) {
     this.fruitIndex = fruitIndex;
+  }
+
+  public addTrainPoints(points = 1) {
+    this.trainPoints += points;
   }
 
   public getColor() {
@@ -47,12 +58,21 @@ export default class Player {
     return this.y;
   }
 
+  public getLastX() {
+    return this.lastX;
+  }
+
+  public getLastY() {
+    return this.lastY;
+  }
+
   public getBrain() {
     return this.brain;
   }
 
   public bottom() {
     if (this.y < this.game.getCanvasConfigs().h - 1) {
+      this.lastY = this.y;
       this.y += 1;
       this.game.renderizeSenary();
     }
@@ -60,6 +80,7 @@ export default class Player {
 
   public top() {
     if (this.y > 0) {
+      this.lastY = this.y;
       this.y -= 1;
       this.game.renderizeSenary();
     }
@@ -67,6 +88,7 @@ export default class Player {
 
   public right() {
     if (this.x < this.game.getCanvasConfigs().w - 1) {
+      this.lastX = this.x;
       this.x += 1;
       this.game.renderizeSenary();
     }
@@ -74,8 +96,32 @@ export default class Player {
 
   public left() {
     if (this.x > 0) {
+      this.lastX = this.x;
       this.x -= 1;
       this.game.renderizeSenary();
+    }
+  }
+
+  public async addNeoron(fx: number, fy: number) {
+    if (this.brain) {
+      const distanceToPrevious = Math.sqrt((this.lastX - fx) ** 2 + (this.lastY - fy) ** 2);
+      const distanceToCurrent = Math.sqrt((this.x - fx) ** 2 + (this.y - fy) ** 2);
+
+      if (distanceToCurrent < distanceToPrevious) {
+        let label = "top";
+
+        if (this.x < fx) {
+          label = "right";
+        } else if (this.x > fx) {
+          label = "left";
+        } else if (this.y < fy) {
+          label = "bottom";
+        } else if (this.y > fy) {
+          label = "top";
+        }
+
+        await this.brain.trainByMove(this.x, this.y, fx, fy, label);
+      }
     }
   }
 
