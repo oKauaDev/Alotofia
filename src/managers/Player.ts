@@ -74,32 +74,48 @@ export default class Player {
     if (this.y < this.game.getCanvasConfigs().h - 1) {
       this.lastY = this.y;
       this.y += 1;
-      this.game.renderizeSenary();
+    } else {
+      this.lastY = 0;
+      this.y = 0;
     }
+
+    this.game.renderizeSenary();
   }
 
   public top() {
     if (this.y > 0) {
       this.lastY = this.y;
       this.y -= 1;
-      this.game.renderizeSenary();
+    } else {
+      this.lastY = this.game.getCanvasConfigs().h;
+      this.y = this.game.getCanvasConfigs().h;
     }
+
+    this.game.renderizeSenary();
   }
 
   public right() {
     if (this.x < this.game.getCanvasConfigs().w - 1) {
       this.lastX = this.x;
       this.x += 1;
-      this.game.renderizeSenary();
+    } else {
+      this.lastX = 0;
+      this.x = 0;
     }
+
+    this.game.renderizeSenary();
   }
 
   public left() {
     if (this.x > 0) {
       this.lastX = this.x;
       this.x -= 1;
-      this.game.renderizeSenary();
+    } else {
+      this.lastX = this.game.getCanvasConfigs().w;
+      this.x = this.game.getCanvasConfigs().w;
     }
+
+    this.game.renderizeSenary();
   }
 
   public async addNeoron(fx: number, fy: number) {

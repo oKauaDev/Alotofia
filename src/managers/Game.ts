@@ -21,6 +21,26 @@ export default class Game {
     return Math.floor(Math.random() * this.fruits.length);
   }
 
+  public getLowestFruit(player: Player) {
+    let lowestFruit: number = 0;
+    const lowestFruitX: number = this.getFruitByIndex(lowestFruit).getX();
+    const lowestFruitY: number = this.getFruitByIndex(lowestFruit).getY();
+
+    this.fruits.forEach((fruit, i) => {
+      const p_x = Math.abs(player.getX() - fruit.getX());
+      const p_y = Math.abs(player.getY() - fruit.getY());
+
+      const lp_x = Math.abs(lowestFruitX - fruit.getX());
+      const lp_y = Math.abs(lowestFruitY - fruit.getY());
+
+      if (p_x + p_y < lp_x + lp_y) {
+        lowestFruit = i;
+      }
+    });
+
+    return lowestFruit;
+  }
+
   public getPlayerByID(id: number) {
     return this.players.find((player) => player.getID() === id);
   }
@@ -147,7 +167,8 @@ export default class Game {
 
         const colisionPlayer = this.getPlayerByID(playerCol.getID());
         if (colisionPlayer) {
-          colisionPlayer.setFruitIndex(this.getFruit());
+          const fruit = this.getLowestFruit(colisionPlayer);
+          colisionPlayer.setFruitIndex(fruit);
         }
       }
     });
