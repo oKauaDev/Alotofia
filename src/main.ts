@@ -1,5 +1,6 @@
 import "./style.css";
 import Loader from "./utils/Loader";
+import generateColor from "./utils/generateColor";
 
 const loader = Loader();
 
@@ -8,24 +9,6 @@ const score = document.querySelector<HTMLUListElement>("[data-score]");
 const modal = document.querySelector<HTMLDivElement>(".settings_modal");
 const formSetting = document.querySelector<HTMLFormElement>(`[data-settings="initialize"]`);
 loader.hidden();
-
-const colors = [
-  "#ec5002",
-  "#ecb002",
-  "#ecf002",
-  "#8cec02",
-  "#02ec02",
-  "#02ecb0",
-  "#02ecf0",
-  "#028cec",
-  "#0202ec",
-  "#5802ec",
-  "#b002ec",
-  "#f002ec",
-  "#ec02e0",
-  "#ec02b0",
-  "#ec02f0",
-];
 
 if (formSetting) {
   formSetting.addEventListener("submit", async (event) => {
@@ -52,7 +35,7 @@ if (formSetting) {
           const player1 = new Player({
             game: game,
             id: i + 1,
-            color: colors[i],
+            color: generateColor(),
           });
 
           loader.text(`Treinando Jogador ${i + 1}...`);
